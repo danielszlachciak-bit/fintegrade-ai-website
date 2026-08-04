@@ -1,0 +1,9 @@
+import Link from "next/link";
+import { site } from "@/lib/site";
+
+export const metadata = { title: "O mnie" };
+
+export default function AboutPage(){return <>
+  <section className="pageHero"><div className="container narrow"><span className="eyebrow">Daniel Szlachciak</span><h1>Finanse, zarządzanie i AI połączone w praktyczny system decyzji</h1></div></section>
+  <section className="section"><div className="container aboutGrid"><div className="portraitPlaceholder"><div className="portraitInitials">DS</div><span>Miejsce na profesjonalne zdjęcie</span></div><div className="aboutCopy"><p className="largeText">Jestem menedżerem finansowym i biegłym rewidentem z ponad 20-letnim doświadczeniem w audycie, controllingu, zarządzaniu finansami i prowadzeniu organizacji.</p><p>Doświadczenie zdobywałem m.in. w EY, w controllingu dużej organizacji handlowej, w branży motoryzacyjnej oraz jako prezes prywatnego szpitala budowanego od etapu start-upu. Pracowałem zarówno z raportowaniem i kontrolą, jak i z realnymi decyzjami operacyjnymi, odpowiedzialnością za wynik, płynność i rozwój.</p><p>Fintegrade.ai powstało z przekonania, że sztuczna inteligencja ma największą wartość wtedy, gdy nie tworzy kolejnej warstwy informacji, lecz pomaga lepiej rozumieć firmę i szybciej podejmować decyzje. Rozwijam koncepcję Digital Business Twin dla mikro i małych przedsiębiorców — rozwiązania łączącego dane finansowe, logikę biznesu i doświadczenie zarządcze.</p><div className="credentialRow"><span>biegły rewident</span><span>finanse zarządcze</span><span>controlling</span><span>AI w biznesie</span></div><div className="heroActions"><a className="button primary" href={site.linkedin} target="_blank" rel="noreferrer">Profil LinkedIn</a><Link className="button secondary" href="/kontakt">Skontaktuj się</Link></div></div></div></section>
+</>}
