@@ -6,13 +6,18 @@ import { useEffect, useId, useRef } from "react";
 declare global {
   interface Window {
     turnstile?: {
-      render: (element: HTMLElement, options: Record<string, unknown>) => string;
+      render: (
+        element: HTMLElement,
+        options: Record<string, unknown>
+      ) => string;
       remove: (widgetId: string) => void;
     };
   }
 }
 
-type Props = { onToken: (token: string) => void };
+type Props = {
+  onToken: (token: string) => void;
+};
 
 export function TurnstileWidget({ onToken }: Props) {
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -21,27 +26,59 @@ export function TurnstileWidget({ onToken }: Props) {
   const reactId = useId();
 
   const render = () => {
-    if (!siteKey || !window.turnstile || !containerRef.current || widgetId.current) return;
-    widgetId.current = window.turnstile.render(containerRef.current, {
-      sitekey: siteKey,
-      theme: "light",
-      size: "flexible",
-      callback: (token: string) => onToken(token),
-      "expired-callback": () => onToken(""),
-      "error-callback": () => onToken(""),
-    });
+    if (
+      !siteKey ||
+      !window.turnstile ||
+      !containerRef.current ||
+      widgetId.current
+    ) {
+      return;
+    }
+
+    widgetId.current = window.turnstile.render(
+      containerRef.current,
+      {
+        sitekey: siteKey,
+        theme: "light",
+        size: "flexible",
+
+        /*
+         * Token przekazujemy ręcznie przez callback.
+         * Wyłączamy automatyczne pole cf-turnstile-response,
+         * aby nie trafiało dodatkowo do FormData formularza.
+         */
+        "response-field": false,
+
+        callback: (token: string) => {
+          onToken(token);
+        },
+
+        "expired-callback": () => {
+          onToken("");
+        },
+
+        "error-callback": () => {
+          onToken("");
+        },
+      }
+    );
   };
 
   useEffect(() => {
     render();
+
     return () => {
-      if (widgetId.current && window.turnstile) window.turnstile.remove(widgetId.current);
+      if (widgetId.current && window.turnstile) {
+        window.turnstile.remove(widgetId.current);
+      }
     };
   }, [siteKey]);
 
   if (!siteKey) {
     return process.env.NODE_ENV === "development" ? (
-      <p className="formHint">Turnstile pominięty w środowisku lokalnym.</p>
+      <p className="formHint">
+        Turnstile pominięty w środowisku lokalnym.
+      </p>
     ) : null;
   }
 
@@ -53,6 +90,7 @@ export function TurnstileWidget({ onToken }: Props) {
         strategy="afterInteractive"
         onLoad={render}
       />
+
       <div ref={containerRef} className="turnstile" />
     </>
   );
