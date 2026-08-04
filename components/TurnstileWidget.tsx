@@ -1,96 +1,118 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useId, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
+
+type TurnstileOptions = {
+  sitekey: string;
+  theme?: "light" | "dark" | "auto";
+  "response-field"?: boolean;
+  callback: (token: string) => void;
+  "expired-callback"?: () => void;
+  "error-callback"?: () => void;
+};
+
+type TurnstileApi = {
+  render: (
+    element: HTMLElement,
+    options: TurnstileOptions
+  ) => string;
+  remove: (widgetId: string) => void;
+};
 
 declare global {
   interface Window {
-    turnstile?: {
-      render: (
-        element: HTMLElement,
-        options: Record<string, unknown>
-      ) => string;
-      remove: (widgetId: string) => void;
-    };
+    turnstile?: TurnstileApi;
   }
 }
 
-type Props = {
+type TurnstileWidgetProps = {
   onToken: (token: string) => void;
 };
 
-export function TurnstileWidget({ onToken }: Props) {
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  const containerRef = useRef<HTMLDivElement>(null);
-  const widgetId = useRef<string | null>(null);
-  const reactId = useId();
+export function TurnstileWidget({
+  onToken,
+}: TurnstileWidgetProps) {
+  const siteKey =
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
-  const render = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+  const onTokenRef = useRef(onToken);
+
+  useEffect(() => {
+    onTokenRef.current = onToken;
+  }, [onToken]);
+
+  const renderWidget = useCallback(() => {
     if (
       !siteKey ||
-      !window.turnstile ||
       !containerRef.current ||
-      widgetId.current
+      !window.turnstile ||
+      widgetIdRef.current
     ) {
       return;
     }
 
-    widgetId.current = window.turnstile.render(
+    widgetIdRef.current = window.turnstile.render(
       containerRef.current,
       {
         sitekey: siteKey,
         theme: "light",
-        size: "flexible",
 
-        /*
-         * Token przekazujemy ręcznie przez callback.
-         * Wyłączamy automatyczne pole cf-turnstile-response,
-         * aby nie trafiało dodatkowo do FormData formularza.
-         */
+        // Token obsługujemy sami przez callback.
+        // Cloudflare nie doda pola cf-turnstile-response
+        // do formularza.
         "response-field": false,
 
         callback: (token: string) => {
-          onToken(token);
+          onTokenRef.current(token);
         },
 
         "expired-callback": () => {
-          onToken("");
+          onTokenRef.current("");
         },
 
         "error-callback": () => {
-          onToken("");
+          onTokenRef.current("");
         },
       }
     );
-  };
-
-  useEffect(() => {
-    render();
-
-    return () => {
-      if (widgetId.current && window.turnstile) {
-        window.turnstile.remove(widgetId.current);
-      }
-    };
   }, [siteKey]);
 
+  useEffect(() => {
+    renderWidget();
+
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
+    };
+  }, [renderWidget]);
+
   if (!siteKey) {
-    return process.env.NODE_ENV === "development" ? (
+    return (
       <p className="formHint">
-        Turnstile pominięty w środowisku lokalnym.
+        Weryfikacja bezpieczeństwa jest chwilowo niedostępna.
       </p>
-    ) : null;
+    );
   }
 
   return (
     <>
       <Script
-        id={`turnstile-${reactId}`}
+        id="cloudflare-turnstile-script"
         src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
         strategy="afterInteractive"
-        onLoad={render}
+        onLoad={renderWidget}
       />
 
-      <div ref={containerRef} className="turnstile" />
+      <div
+        ref={containerRef}
+        className="turnstile"
+        aria-label="Weryfikacja bezpieczeństwa"
+      />
     </>
   );
+}
