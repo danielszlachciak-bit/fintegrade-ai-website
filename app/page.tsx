@@ -2,9 +2,9 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/SectionHeading";
 
 const useCases = [
-  ["Wiem, ile naprawdę zarabiam", "Połączenie przepływów, faktur i kosztów w jeden obraz sytuacji firmy."],
-  ["Dostrzegam problemy zanim zaczną eskalować", "Alerty o płynności, podatkach, rosnących kosztach i odchyleniach od planu."],
-  ["Podejmuję decyzje na liczbach", "Scenariusze i rekomendacje zapisane prostym, biznesowym językiem."],
+  ["Wiem, ile naprawdę zarabiam", "Przychody, koszty, przepływy i zobowiązania w jednym aktualnym obrazie firmy."],
+  ["Dostrzegam problemy zanim stanie się poważny", "Wczesne sygnały o płynności, zaległych płatnościach, podatkach i rosnących kosztach."],
+  ["Zamiast przeczucia opieram się na liczbach", "Scenariusze, konsekwencje i rekomendowane działania przedstawione prostym językiem."],
 ];
 
 export default function Home() {
@@ -12,11 +12,11 @@ export default function Home() {
     <section className="hero">
       <div className="container heroGrid">
         <div className="heroCopy">
-          <span className="eyebrow">Finanse zarządcze × sztuczna inteligencja</span>
+          <span className="eyebrow">FINANSE ZARZĄDCZE × SZTUCZNA INTELIGENCJA</span>
           <h1>Firma nie potrzebuje więcej raportów. Potrzebuje <em>lepszych decyzji.</em></h1>
-          <p>fintegrade.ai upraszcza zarządzanie finansami mikro i małej firmy — łącząc dane, doświadczenie menedżerskie i AI w jeden czytelny system wsparcia.</p>
+          <p>Budujemy fintegrade.ai — cyfrowego doradcę finansowego dla mikro i małych firm. Łączy dane finansowe z AI, aby pokazywać nie tylko, co wydarzyło się w firmie, ale przede wszystkim: co wymaga uwagi i co warto zrobić dalej.</p>
           <div className="heroActions"><Link className="button primary" href="/mvp">Zobacz demo</Link><Link className="button secondary" href="/ankieta">Wpłyń na produkt</Link></div>
-          <div className="trustStrip"><span>Bez sprzedaży danych</span><span>Dostęp tylko do odczytu</span><span>Decyzja zawsze po stronie człowieka</span></div>
+          <div className="trustStrip"><span>Twoje dane pozostają Twoimi danymi</span><span>Tylko dane potrzebne do analizy</span><span>AI rekomenduje. Ty decydujesz.</span></div>
         </div>
         <div className="heroVisual" aria-label="Przykładowy pulpit finansowy">
           <div className="phoneFrame">
@@ -32,13 +32,13 @@ export default function Home() {
     </section>
 
     <section className="section"><div className="container">
-      <SectionHeading eyebrow="Po co to powstaje" title="Finanse firmy powinny być zrozumiałe przed końcem miesiąca" lead="Księgowość mówi, co już się wydarzyło. Fintegrade Twin ma pomóc właścicielowi zrozumieć, co dzieje się teraz i co warto zrobić jako następny krok." align="center" />
+      <SectionHeading eyebrow="PO CO TO POWSTAJE" title="Finanse firmy powinny być zrozumiałe przed końcem miesiąca" lead="Dane potrzebne do podjęcia decyzji często już istnieją — na rachunku bankowym, w fakturach i księgowości. Problem w tym, że są rozproszone. fintegrade.ai ma łączyć je w jeden aktualny obraz firmy i wskazywać to, co naprawdę wymaga uwagi." align="center" />
       <div className="threeGrid">{useCases.map(([t,d],i)=><article className="featureCard" key={t}><span className="number">0{i+1}</span><h3>{t}</h3><p>{d}</p></article>)}</div>
     </div></section>
 
     <section className="section soft"><div className="container split">
-      <div><span className="eyebrow">Digital Twin firmy</span><h2>Nie chatbot. Model Twojego biznesu.</h2><p>Digital Twin łączy dane z rachunku, faktur i księgowości z logiką działania firmy. Dzięki temu AI nie odpowiada ogólnie — analizuje konkretną sytuację, ograniczenia i scenariusze.</p><Link className="textLink" href="/digital-twin">Jak działa Digital Twin →</Link></div>
-      <div className="twinDiagram"><div className="sourcePills"><span>Bank</span><span>KSeF</span><span>Księgowość</span><span>Plany</span></div><div className="twinCore"><i>FT</i><b>Model firmy</b><small>finanse • ryzyko • decyzje</small></div><div className="outputPills"><span>Alerty</span><span>Prognozy</span><span>Scenariusze</span></div></div>
+      <div><span className="eyebrow">DIGITAL TWIN FIRMY</span><h2>Nie kolejny chatbot. AI, które zna kontekst Twojej firmy.</h2><p>Digital Twin łączy dane z rachunku, faktur i księgowości z logiką działania firmy. Dzięki temu AI nie odpowiada ogólnie — analizuje konkretną sytuację, ograniczenia i scenariusze.</p><Link className="textLink" href="/digital-twin">Jak działa Digital Twin →</Link></div>
+      <div className="twinDiagram"><div className="sourcePills"><span>Bank</span><span>KSeF</span><span>Księgowość</span><span>Plany</span></div><div className="twinCore"><i>FT</i><b>Finansowy model firmy</b><small>płynność • rentowność • ryzyko • decyzje</small></div><div className="outputPills"><span>Alerty</span><span>Prognozy</span><span>Scenariusze</span></div></div>
     </div></section>
 
     <section className="section"><div className="container">
