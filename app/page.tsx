@@ -38,7 +38,7 @@ export default function Home() {
 
     <section className="section soft"><div className="container split">
       <div><span className="eyebrow">DIGITAL TWIN FIRMY</span><h2>Nie kolejny chatbot. AI, które zna kontekst Twojej firmy.</h2><p>Digital Twin łączy dane z rachunku, faktur i księgowości z logiką działania firmy. Dzięki temu AI nie odpowiada ogólnie — analizuje konkretną sytuację, ograniczenia i scenariusze.</p><Link className="textLink" href="/digital-twin">Jak działa Digital Twin →</Link></div>
-      <div className="twinDiagram"><div className="sourcePills"><span>Bank</span><span>KSeF</span><span>Księgowość</span><span>Plany</span></div><div className="twinCore"><i>FT</i><b>Finansowy model firmy</b><small>płynność • rentowność <br /> ryzyko • decyzje</small></div><div className="outputPills"><span>Alerty</span><span>Prognozy</span><span>Scenariusze</span></div></div>
+      <div className="twinDiagram"><div className="sourcePills"><span>Bank</span><span>KSeF</span><span>Księgowość</span><span>Plany</span></div><div className="twinCore"><i>FT</i><b>Finansowy model firmy</b><small style={{ display: "block", textAlign: "center" }}> płynność • rentowność <br /> ryzyko • decyzje </small></div><div className="outputPills"><span>Alerty</span><span>Prognozy</span><span>Scenariusze</span></div></div>
     </div></section>
 
     <section className="section"><div className="container">
