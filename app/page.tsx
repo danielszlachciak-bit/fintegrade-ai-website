@@ -42,11 +42,11 @@ export default function Home() {
     </div></section>
 
     <section className="section"><div className="container">
-      <SectionHeading eyebrow="Praktyczna wiedza" title="AI w finansach bez marketingowej mgły" lead="Konkretne przykłady, ograniczenia, ryzyka i procesy, które można wdrożyć w małej firmie." />
+      <SectionHeading eyebrow="PRAKTYCZNA WIEDZA" title="AI w finansach. Konkretnie i praktycznie." lead="Konkretne przykłady, ograniczenia, ryzyka i procesy, które można wdrożyć w małej firmie." />
       <div className="articleGrid">
-        <article><span>Cash flow</span><h3>Jak AI może wcześniej wykryć problem z płynnością?</h3><p>Od danych wejściowych po alert, który prowadzi do działania.</p><Link href="/wiedza">Czytaj →</Link></article>
-        <article><span>KSeF</span><h3>Faktury jako źródło wiedzy zarządczej, nie tylko podatkowej</h3><p>Co można zobaczyć, gdy dane są uporządkowane i aktualne.</p><Link href="/wiedza">Czytaj →</Link></article>
-        <article><span>Decyzje</span><h3>AI CFO: gdzie kończy się analiza, a zaczyna odpowiedzialność?</h3><p>Jak używać rekomendacji AI bez oddawania kontroli.</p><Link href="/wiedza">Czytaj →</Link></article>
+        <article><span>Cash flow</span><h3>Jak wcześniej zobaczyć problem z płynnością?</h3><p>Jak połączyć dane z rachunku, należności i zobowiązań, aby zobaczyć ryzyko zanim zabraknie gotówki?</p><Link href="/wiedza">Czytaj →</Link></article>
+        <article><span>KSeF</span><h3>KSeF to nie tylko podatki. To również dane o Twoim biznesie.</h3><p>Sprzedaż, koszty, klienci, dostawcy i terminy płatności mogą tworzyć aktualny obraz sytuacji firmy.</p><Link href="/wiedza">Czytaj →</Link></article>
+        <article><span>Decyzje</span><h3>AI może rekomendować. Kto powinien podejmować decyzję?</h3><p>Jak korzystać z analiz i rekomendacji AI, nie oddając technologii odpowiedzialności za firmę.</p><Link href="/wiedza">Czytaj →</Link></article>
       </div>
     </div></section>
 
