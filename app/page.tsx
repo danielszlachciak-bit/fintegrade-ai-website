@@ -3,7 +3,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 
 const useCases = [
   ["Wiem, ile naprawdę zarabiam", "Połączenie przepływów, faktur i kosztów w jeden obraz sytuacji firmy."],
-  ["Widzę problemy wcześniej", "Alerty o płynności, podatkach, rosnących kosztach i odchyleniach od planu."],
+  ["Dostrzegam problemy zanim zaczną eskalować", "Alerty o płynności, podatkach, rosnących kosztach i odchyleniach od planu."],
   ["Podejmuję decyzje na liczbach", "Scenariusze i rekomendacje zapisane prostym, biznesowym językiem."],
 ];
 
