@@ -115,7 +115,7 @@ export default function AboutPage() {
             <div className="heroActions">
               <a
                 className="button primary"
-                href={www.linkedin.com/in/daniel-szlachciak-82997a13}
+                href={site.linkedin}
                 target="_blank"
                 rel="noreferrer"
               >
