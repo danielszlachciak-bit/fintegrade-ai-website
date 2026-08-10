@@ -14,9 +14,7 @@ export default function AboutPage() {
           <span className="eyebrow">Daniel Szlachciak</span>
 
           <h1>
-            Ponad 25 lat w finansach i zarządzaniu. Dziś wykorzystuję to
-            doświadczenie, aby możliwości AI były dostępne także dla mniejszych
-            firm.
+            Zarządzałem finansami i doradzałem dużym firmom polskim i międzynarodowym. Dziś wykorzystuję swoje doświadczenie, aby, wykorzystując AI, również małe i średnie firmy miały dostęp do profesjonalnych usług zarządzania fiansami.
           </h1>
         </div>
       </section>
