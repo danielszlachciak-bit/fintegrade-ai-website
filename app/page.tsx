@@ -50,6 +50,6 @@ export default function Home() {
       </div>
     </div></section>
 
-    <section className="section"><div className="container ctaPanel"><div><span className="eyebrow light">Współtwórz produkt</span><h2>Najpierw realny problem. Dopiero później technologia.</h2><p>Krótka ankieta pomoże ustalić, które funkcje są naprawdę potrzebne przedsiębiorcom i za co byliby gotowi zapłacić.</p></div><Link className="button white" href="/ankieta">Wypełnij ankietę</Link></div></section>
+    <section className="section"><div className="container ctaPanel"><div><span className="eyebrow light">WSPÓŁTWÓRZ FINTEGRADE.AI</span><h2>Pomóż nam zbudować finansowego doradcę, którego naprawdę warto używać.</h2><p>Budujemy fintegrade.ai dla mikro i małych przedsiębiorców. Krótka ankieta pomoże nam zrozumieć, które problemy finansowe są naprawdę istotne i jakie funkcje powinny znaleźć się w pierwszej wersji produktu.</p></div><Link className="button white" href="/ankieta">Wypełnij ankietę</Link></div></section>
   </>;
 }
