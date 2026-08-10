@@ -377,3 +377,59 @@ legend { margin-bottom: 10px; font-size: clamp(1.55rem, 3vw, 2.2rem); font-weigh
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }
+/* ABOUT PAGE - PORTRAIT */
+
+.portraitPhoto {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  align-self: start;
+}
+
+.portraitPhoto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+
+/* ABOUT PAGE - KEY STATEMENT */
+
+.aboutStatement {
+  margin: 32px 0;
+  font-size: 1.15rem;
+}
+
+
+/* ABOUT PAGE - THREE KEY QUESTIONS */
+
+.aboutQuestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin: 28px 0 32px;
+  padding: 24px 28px;
+
+  border-radius: 20px;
+
+  font-size: 1.2rem;
+  line-height: 1.45;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .portraitPhoto {
+    max-width: 320px;
+    margin-bottom: 32px;
+  }
+
+  .aboutQuestions {
+    padding: 20px;
+    font-size: 1.1rem;
+  }
+}
