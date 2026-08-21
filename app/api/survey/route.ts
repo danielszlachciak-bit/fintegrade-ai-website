@@ -6,6 +6,8 @@ import { verifyTurnstile } from "@/lib/turnstile";
 
 export const runtime = "nodejs";
 
+const PRIVACY_POLICY_VERSION = "2026-08-21";
+
 const surveySchema = z
   .object({
     companySize: z.string().trim().min(1).max(80),
@@ -32,14 +34,22 @@ const surveySchema = z
       .max(160)
       .or(z.literal("")),
 
-    consent: z.literal(true),
+    privacyAcknowledged: z.literal(true),
+    mvpConsent: z.boolean(),
 
-    // Pole-pułapka na boty. Musi pozostać puste.
     website: z.string().max(0),
-
     turnstileToken: z.string().min(1).max(5000),
   })
-  .strict();
+  .superRefine((data, ctx) => {
+    if (data.mvpConsent && !data.email) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["email"],
+        message:
+          "Adres e-mail jest wymagany przy zgodzie na kontakt dotyczący MVP.",
+      });
+    }
+  });
 
 function formatUnknownError(error: unknown) {
   if (error instanceof Error) {
@@ -61,24 +71,20 @@ function formatUnknownError(error: unknown) {
 
 export async function POST(request: Request) {
   try {
-    /*
-     * Ochrona przed przesłaniem nadmiernie dużego żądania.
-     * Ankieta powinna mieć najwyżej kilka kilobajtów.
-     */
     const contentLength = Number(
       request.headers.get("content-length") ?? "0"
     );
 
-    if (Number.isFinite(contentLength) && contentLength > 20_000) {
+    if (
+      Number.isFinite(contentLength) &&
+      contentLength > 20_000
+    ) {
       return NextResponse.json(
         { error: "payload_too_large" },
         { status: 413 }
       );
     }
 
-    /*
-     * Odczytanie JSON-a.
-     */
     let requestBody: unknown;
 
     try {
@@ -90,9 +96,6 @@ export async function POST(request: Request) {
       );
     }
 
-    /*
-     * Walidacja wszystkich pól ankiety.
-     */
     const parsed = surveySchema.safeParse(requestBody);
 
     if (!parsed.success) {
@@ -102,14 +105,14 @@ export async function POST(request: Request) {
       );
 
       return NextResponse.json(
-        { error: "invalid_input" },
+        {
+          error: "invalid_input",
+          fields: parsed.error.flatten().fieldErrors,
+        },
         { status: 400 }
       );
     }
 
-    /*
-     * Weryfikacja Cloudflare Turnstile po stronie serwera.
-     */
     const turnstileValid = await verifyTurnstile(
       parsed.data.turnstileToken
     );
@@ -123,38 +126,45 @@ export async function POST(request: Request) {
       );
     }
 
-    /*
-     * Pola techniczne nie są zapisywane w bazie.
-     */
     const {
       turnstileToken: _turnstileToken,
       website: _website,
       ...surveyData
     } = parsed.data;
 
-    /*
-     * Połączenie administracyjne z Supabase.
-     */
     const supabase = getSupabaseAdmin();
 
-    /*
-     * Zapis odpowiedzi do tabeli survey_submissions.
-     */
-    const { data: insertedRows, error: insertError } = await supabase
-      .from("survey_submissions")
-      .insert({
-        company_size: surveyData.companySize,
-        monthly_revenue: surveyData.monthlyRevenue,
-        finance_pain: surveyData.financePain,
-        data_access: surveyData.dataAccess,
-        must_have: surveyData.mustHave,
-        willingness_to_pay: surveyData.willingnessToPay,
-        email: surveyData.email || null,
-        consent: surveyData.consent,
-        source: "fintegrade.ai",
-      })
-      .select("id")
-      .limit(1);
+    const { data: insertedRows, error: insertError } =
+      await supabase
+        .from("survey_submissions")
+        .insert({
+          company_size: surveyData.companySize,
+          monthly_revenue: surveyData.monthlyRevenue,
+          finance_pain: surveyData.financePain,
+          data_access: surveyData.dataAccess,
+          must_have: surveyData.mustHave,
+          willingness_to_pay: surveyData.willingnessToPay,
+
+          email: surveyData.email || null,
+
+          privacy_acknowledged:
+            surveyData.privacyAcknowledged,
+
+          privacy_policy_version:
+            PRIVACY_POLICY_VERSION,
+
+          mvp_consent:
+            surveyData.mvpConsent,
+
+          mvp_consent_at:
+            surveyData.mvpConsent
+              ? new Date().toISOString()
+              : null,
+
+          source: "fintegrade.ai",
+        })
+        .select("id")
+        .limit(1);
 
     if (insertError) {
       console.error(
@@ -189,6 +199,7 @@ export async function POST(request: Request) {
 
     console.info("survey_submission_saved", {
       id: insertedId,
+      mvpConsent: surveyData.mvpConsent,
     });
 
     return NextResponse.json(
