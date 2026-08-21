@@ -165,7 +165,7 @@ export default function SecurityPage() {
             </Link>
 
             <Link
-              className="button secondary"
+              className="button white"
               href="/polityka-prywatnosci"
             >
               Polityka prywatności
