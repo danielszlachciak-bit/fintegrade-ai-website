@@ -3,15 +3,26 @@
 import { FormEvent, useState } from "react";
 import { TurnstileWidget } from "./TurnstileWidget";
 
-type FormStatus = "idle" | "sending" | "success" | "error";
+type FormStatus =
+  | "idle"
+  | "sending"
+  | "success"
+  | "error";
 
 export function ContactForm() {
   const [token, setToken] = useState("");
-  const [status, setStatus] = useState<FormStatus>("idle");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [status, setStatus] =
+    useState<FormStatus>("idle");
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  const [errorMessage, setErrorMessage] =
+    useState("");
+
+  async function submit(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
+
+    setErrorMessage("");
 
     if (!token) {
       setStatus("error");
@@ -24,35 +35,64 @@ export function ContactForm() {
     const formElement = event.currentTarget;
     const formData = new FormData(formElement);
 
+    const privacyAcknowledged =
+      formData.get("privacyAcknowledged") === "true";
+
+    if (!privacyAcknowledged) {
+      setStatus("error");
+      setErrorMessage(
+        "Przed wysłaniem wiadomości potwierdź zapoznanie się z Polityką prywatności."
+      );
+      return;
+    }
+
     const requestBody = {
       name: String(formData.get("name") ?? ""),
       email: String(formData.get("email") ?? ""),
-      company: String(formData.get("company") ?? ""),
-      message: String(formData.get("message") ?? ""),
-      consent: formData.get("consent") === "true",
-      website: String(formData.get("website") ?? ""),
+      company: String(
+        formData.get("company") ?? ""
+      ),
+      message: String(
+        formData.get("message") ?? ""
+      ),
+
+      privacyAcknowledged,
+
+      website: String(
+        formData.get("website") ?? ""
+      ),
+
       turnstileToken: token,
     };
 
     setStatus("sending");
-    setErrorMessage("");
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const response = await fetch(
+        "/api/contact",
+        {
+          method: "POST",
 
-      const responseBody = await response.json().catch(() => null);
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      const responseBody = await response
+        .json()
+        .catch(() => null);
 
       if (!response.ok) {
-        console.error("contact_form_error", {
-          status: response.status,
-          response: responseBody,
-        });
+        console.error(
+          "contact_form_error",
+          {
+            status: response.status,
+            response: responseBody,
+          }
+        );
 
         setStatus("error");
 
@@ -60,7 +100,9 @@ export function ContactForm() {
           setErrorMessage(
             "Sprawdź poprawność wszystkich pól formularza."
           );
-        } else if (response.status === 403) {
+        } else if (
+          response.status === 403
+        ) {
           setErrorMessage(
             "Weryfikacja bezpieczeństwa wygasła. Odśwież stronę i spróbuj ponownie."
           );
@@ -74,12 +116,17 @@ export function ContactForm() {
       }
 
       formElement.reset();
+
       setToken("");
       setStatus("success");
     } catch (error) {
-      console.error("contact_request_failed", error);
+      console.error(
+        "contact_request_failed",
+        error
+      );
 
       setStatus("error");
+
       setErrorMessage(
         "Nie udało się połączyć z serwerem. Spróbuj ponownie."
       );
@@ -90,14 +137,22 @@ export function ContactForm() {
     return (
       <div className="successPanel compact">
         <div>✓</div>
-        <h2>Wiadomość zapisana.</h2>
-        <p>Odpowiem na podany adres e-mail.</p>
+
+        <h2>Wiadomość została wysłana.</h2>
+
+        <p>
+          Dziękuję za kontakt. Odpowiem na podany
+          adres e-mail.
+        </p>
       </div>
     );
   }
 
   return (
-    <form className="contactForm" onSubmit={submit}>
+    <form
+      className="contactForm"
+      onSubmit={submit}
+    >
       <label>
         Imię
         <input
@@ -140,8 +195,13 @@ export function ContactForm() {
         />
       </label>
 
-      <label className="honeypot" aria-hidden="true">
+      {/* HONEYPOT DLA BOTÓW */}
+      <label
+        className="honeypot"
+        aria-hidden="true"
+      >
         Strona
+
         <input
           name="website"
           tabIndex={-1}
@@ -149,25 +209,27 @@ export function ContactForm() {
         />
       </label>
 
+      {/* POTWIERDZENIE INFORMACJI RODO */}
       <label className="consent">
         <input
           required
           type="checkbox"
-          name="consent"
+          name="privacyAcknowledged"
           value="true"
         />
 
         <span>
-          Akceptuję przetwarzanie danych w celu odpowiedzi na
-          wiadomość zgodnie z{" "}
+          Potwierdzam, że zapoznałem/am się z{" "}
           <a
             href="/polityka-prywatnosci"
             target="_blank"
             rel="noreferrer"
           >
-            polityką prywatności
+            Polityką prywatności
           </a>
-          .
+          , w tym z informacją o zasadach
+          przetwarzania danych przekazanych w
+          formularzu kontaktowym.
         </span>
       </label>
 
@@ -185,7 +247,9 @@ export function ContactForm() {
       <button
         className="button primary"
         type="submit"
-        disabled={status === "sending" || !token}
+        disabled={
+          status === "sending" || !token
+        }
       >
         {status === "sending"
           ? "Wysyłam…"
@@ -195,7 +259,10 @@ export function ContactForm() {
       </button>
 
       {status === "error" && (
-        <p className="errorMessage" role="alert">
+        <p
+          className="errorMessage"
+          role="alert"
+        >
           {errorMessage}
         </p>
       )}
