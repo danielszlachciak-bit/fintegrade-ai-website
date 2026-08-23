@@ -1,18 +1,171 @@
-import { SectionHeading } from "@/components/SectionHeading";
+import Link from "next/link";
+import { knowledgeArticles } from "@/lib/knowledge";
+import styles from "./knowledge.module.css";
 
-export const metadata = { title: "Wiedza: AI i finanse firmy" };
-
-const articles=[
-  ["Płynność","Jak zbudować prostą prognozę cash flow z danych bankowych i faktur","7 min","Praktyczny model 13-tygodniowy dla mikrofirmy — bez rozbudowanego systemu ERP."],
-  ["AI w firmie","Pięć zadań finansowych, które warto automatyzować jako pierwsze","6 min","Low hanging fruit: mniej ręcznego przepisywania i szybsze wychwytywanie odchyleń."],
-  ["KSeF","Co Digital Twin może zobaczyć w danych z KSeF","8 min","Struktura sprzedaży, dynamika kosztów i sygnały ryzyka ukryte w fakturach."],
-  ["Bezpieczeństwo","Dostęp do rachunku tylko do odczytu — co to naprawdę oznacza","9 min","Zakres uprawnień, ryzyka, zgody i sposoby ograniczania ekspozycji danych."],
-  ["Rentowność","Dlaczego dodatnie saldo na koncie nie oznacza zysku","5 min","Najczęstsze pomyłki właścicieli małych firm i prosty sposób ich uniknięcia."],
-  ["Decyzje","Kiedy nie należy ufać rekomendacji AI","7 min","Sygnały ostrzegawcze, brakujące dane i obowiązek ludzkiej weryfikacji."]
+const categoryOrder = [
+  "Fundamenty finansów",
+  "Płynność i gotówka",
+  "Rentowność i sprzedaż",
+  "Ludzie i koszty pracy",
+  "Cena i podatki"
 ];
 
-export default function KnowledgePage(){return <>
-  <section className="pageHero"><div className="container narrow"><span className="eyebrow">Baza wiedzy</span><h1>Praktycznie o AI, finansach i decyzjach w małej firmie</h1><p>Bez obietnic „rewolucji”. Z przykładami, ograniczeniami i rachunkiem ekonomicznym wdrożenia.</p></div></section>
-  <section className="section"><div className="container"><SectionHeading title="Najnowsze tematy" lead="W tej wersji to katalog startowy. Kolejny krok to podłączenie prostego CMS lub publikowanie treści jako pliki MDX." />
-  <div className="knowledgeGrid">{articles.map(([cat,t,time,d])=><article key={t}><div><span>{cat}</span><small>{time}</small></div><h2>{t}</h2><p>{d}</p><button disabled aria-label="Artykuł w przygotowaniu">Wkrótce</button></article>)}</div></div></section>
-</>}
+export const metadata = {
+  title: "Wiedza | fintegrade.ai",
+  description:
+    "Praktyczna wiedza finansowa dla mikro i małych przedsiębiorców: płynność, rentowność, marża, koszty, VAT i decyzje biznesowe prostym językiem."
+};
+
+export default function KnowledgePage() {
+  const featured = knowledgeArticles.slice(0, 3);
+
+  return (
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <div className={styles.shell}>
+          <p className={styles.eyebrow}>WIEDZA DLA PRZEDSIĘBIORCY</p>
+          <h1 className={styles.heroTitle}>
+            Finanse firmy bez księgowego żargonu.
+          </h1>
+          <p className={styles.heroLead}>
+            Krótkie, praktyczne wyjaśnienia pojęć, które pomagają lepiej rozumieć
+            własny biznes i podejmować decyzje na podstawie liczb — nawet jeśli
+            finanse nie są Twoją specjalnością.
+          </p>
+          <div className={styles.heroPrinciples} aria-label="Jak piszemy">
+            <span>prosty język</span>
+            <span>konkretne przykłady</span>
+            <span>bez teorii dla samej teorii</span>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.featuredSection}>
+        <div className={styles.shell}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>NA DOBRY POCZĄTEK</p>
+              <h2>Trzy rzeczy, które warto zrozumieć najpierw</h2>
+            </div>
+            <p>
+              To fundamenty. Bez nich łatwo pomylić dobrą sprzedaż z dobrym
+              biznesem albo wysokie saldo z bezpieczeństwem finansowym.
+            </p>
+          </div>
+
+          <div className={styles.featuredGrid}>
+            {featured.map((article) => (
+              <Link
+                href={`/wiedza/${article.slug}`}
+                className={styles.featuredCard}
+                key={article.slug}
+              >
+                <div className={styles.cardTopline}>
+                  <span className={styles.articleNumber}>
+                    {String(article.number).padStart(2, "0")}
+                  </span>
+                  <span>{article.readTime}</span>
+                </div>
+                <h3>{article.title}</h3>
+                <p>{article.excerpt}</p>
+                <span className={styles.readMore}>Czytaj artykuł →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.librarySection}>
+        <div className={styles.shell}>
+          <div className={styles.sectionHeadingCompact}>
+            <p className={styles.eyebrow}>PRAKTYCZNA BIBLIOTEKA</p>
+            <h2>20 tematów, które pomagają czytać własną firmę</h2>
+          </div>
+
+          <nav className={styles.jumpNav} aria-label="Kategorie wiedzy">
+            {categoryOrder.map((category) => (
+              <a key={category} href={`#${slugifyCategory(category)}`}>
+                {category}
+              </a>
+            ))}
+          </nav>
+
+          <div className={styles.categoryStack}>
+            {categoryOrder.map((category) => {
+              const items = knowledgeArticles.filter(
+                (article) => article.category === category
+              );
+
+              return (
+                <section
+                  className={styles.categorySection}
+                  id={slugifyCategory(category)}
+                  key={category}
+                >
+                  <div className={styles.categoryHeader}>
+                    <h3>{category}</h3>
+                    <span>{items.length} artykułów</span>
+                  </div>
+
+                  <div className={styles.articleList}>
+                    {items.map((article) => (
+                      <Link
+                        href={`/wiedza/${article.slug}`}
+                        className={styles.articleRow}
+                        key={article.slug}
+                      >
+                        <span className={styles.rowNumber}>
+                          {String(article.number).padStart(2, "0")}
+                        </span>
+                        <div className={styles.rowContent}>
+                          <h4>{article.title}</h4>
+                          <p>{article.excerpt}</p>
+                        </div>
+                        <span className={styles.rowMeta}>{article.readTime}</span>
+                        <span className={styles.rowArrow} aria-hidden="true">
+                          →
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.bottomCta}>
+        <div className={`${styles.shell} ${styles.bottomCtaInner}`}>
+          <div>
+            <p className={styles.eyebrow}>FINTEGRADE.AI</p>
+            <h2>Wiedza jest ważna. Jeszcze lepiej, gdy pracuje na Twoich danych.</h2>
+            <p>
+              fintegrade.ai rozwijamy po to, aby takie pojęcia jak płynność,
+              rentowność czy marża nie kończyły się na teorii, lecz pomagały
+              podejmować codzienne decyzje w konkretnej firmie.
+            </p>
+          </div>
+          <div className={styles.ctaLinks}>
+            <Link href="/ankieta" className={styles.primaryLink}>
+              Wypełnij ankietę
+            </Link>
+            <Link href="/kontakt" className={styles.secondaryLink}>
+              Skontaktuj się
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function slugifyCategory(category: string) {
+  return category
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ł/g, "l")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
