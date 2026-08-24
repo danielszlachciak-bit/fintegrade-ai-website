@@ -160,8 +160,8 @@ export default function PrivacyPolicyPage() {
               adres e-mail, jeżeli zostanie dobrowolnie podany w ankiecie;
             </li>
             <li>
-              imię, adres e-mail, nazwę firmy oraz treść wiadomości przesłanej
-              przez formularz kontaktowy;
+              imię, adres e-mail, nazwę firmy, wybrany temat kontaktu oraz treść
+              wiadomości przesłanej przez formularz kontaktowy;
             </li>
             <li>
               informacje o udzielonych zgodach, np. na kontakt dotyczący testów

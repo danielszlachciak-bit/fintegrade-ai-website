@@ -8,16 +8,18 @@ export function Footer() {
       <div className="container footerGrid">
         <div>
           <Logo />
-          <p>Finanse firmy zamienione w prostsze, szybsze i lepiej uzasadnione decyzje.</p>
+          <p>Finanse zarządcze, controlling i AI — od danych do lepiej uzasadnionych decyzji.</p>
         </div>
         <div>
-          <strong>Projekt</strong>
-          <Link href="/digital-twin">Digital Twin</Link>
+          <strong>Dwa obszary</strong>
+          <Link href="/digital-twin">Digital Twin dla mikrofirm</Link>
           <Link href="/mvp">Demo aplikacji</Link>
           <Link href="/ankieta">Ankieta przedsiębiorców</Link>
+          <Link href="/controlling-ai">Controlling × AI</Link>
         </div>
         <div>
-          <strong>Zaufanie</strong>
+          <strong>Wiedza i zaufanie</strong>
+          <Link href="/wiedza">Wiedza</Link>
           <Link href="/bezpieczenstwo">Bezpieczeństwo</Link>
           <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
           <Link href="/cookies">Cookies</Link>
@@ -27,6 +29,7 @@ export function Footer() {
           <strong>Kontakt</strong>
           <a href={`mailto:${site.email}`}>{site.email}</a>
           <Link href="/kontakt">Formularz kontaktowy</Link>
+          <Link href="/o-mnie">O mnie</Link>
           <a href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
         </div>
       </div>
