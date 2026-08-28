@@ -10,16 +10,6 @@ const categoryOrder = [
   "Cena i podatki"
 ];
 
-const controllingTopics = [
-  "AI w controllingu: od czego naprawdę warto zacząć?",
-  "Controller z AI czy AI zamiast controllera?",
-  "Dlaczego automatyzacja raportowania to jeszcze nie nowoczesny controlling",
-  "Jak wykorzystać AI do analizy odchyleń",
-  "Rolling forecast zamiast budżetu raz w roku",
-  "Jak przygotować dane finansowe do wykorzystania przez AI",
-  "Jak znaleźć procesy controllingowe, które warto automatyzować jako pierwsze",
-  "Od dashboardu do decyzji: dlaczego więcej KPI nie oznacza lepszego zarządzania"
-];
 
 export const metadata = {
   title: "Wiedza | fintegrade.ai",
@@ -28,7 +18,19 @@ export const metadata = {
 };
 
 export default function KnowledgePage() {
-  const featured = knowledgeArticles.slice(0, 3);
+  const entrepreneurArticles = knowledgeArticles.filter(
+    (article) => article.track !== "controlling-ai"
+  );
+  const controllingArticles = knowledgeArticles.filter(
+    (article) => article.track === "controlling-ai"
+  );
+  const featured = entrepreneurArticles.slice(0, 3);
+  const controllingFoundation = controllingArticles.find(
+    (article) => article.number === 0
+  );
+  const controllingSeries = controllingArticles.filter(
+    (article) => article.number !== 0
+  );
 
   return (
     <main className={styles.page}>
@@ -70,10 +72,10 @@ export default function KnowledgePage() {
             </a>
 
             <a href="#controlling-ai" className={`${styles.trackCard} ${styles.trackCardDark}`}>
-              <div className={styles.trackTopline}><span>02</span><b>dział w rozwoju</b></div>
+              <div className={styles.trackTopline}><span>02</span><b>11 opublikowanych artykułów</b></div>
               <h3>Controlling × AI</h3>
               <p>Automatyzacja analiz, forecasting, scenariusze, AI jako copilot controllera i projektowanie controllingu, który wspiera decyzje zamiast tylko produkować raporty.</p>
-              <span className={styles.trackLink}>Zobacz plan tematów ↓</span>
+              <span className={styles.trackLink}>Przejdź do serii ↓</span>
             </a>
           </div>
         </div>
@@ -122,7 +124,7 @@ export default function KnowledgePage() {
 
           <div className={styles.categoryStack}>
             {categoryOrder.map((category) => {
-              const items = knowledgeArticles.filter((article) => article.category === category);
+              const items = entrepreneurArticles.filter((article) => article.category === category);
 
               return (
                 <section className={styles.categorySection} id={slugifyCategory(category)} key={category}>
@@ -156,19 +158,45 @@ export default function KnowledgePage() {
           <div className={styles.sectionHeading}>
             <div>
               <p className={styles.eyebrow}>CONTROLLING × AI</p>
-              <h2>Drugi dział Wiedzy budujemy wokół realnych problemów controllingu.</h2>
+              <h2>Najpierw rama controllingu. Dopiero potem technologia.</h2>
             </div>
             <p>
-              Na początku publikujemy wiedzę wynikającą z praktyki i rozwijanych wdrożeń. Nie będziemy tworzyć biblioteki „o AI” — interesują nas przypadki, w których technologia realnie poprawia proces analityczny albo decyzję.
+              Seria prowadzi od pytania, czym powinien być współczesny controlling,
+              przez wybór zastosowań AI i rolę controllera, aż po konkretne use case&apos;y,
+              architekturę informacji oraz pomiar ROI.
             </p>
           </div>
 
+          {controllingFoundation ? (
+            <Link
+              href={`/wiedza/${controllingFoundation.slug}`}
+              className={styles.controllingFoundation}
+            >
+              <div className={styles.foundationTopline}>
+                <span>00 · ZACZNIJ TUTAJ</span>
+                <span>{controllingFoundation.readTime}</span>
+              </div>
+              <h3>{controllingFoundation.title}</h3>
+              <p>{controllingFoundation.excerpt}</p>
+              <span className={styles.readMore}>Czytaj artykuł →</span>
+            </Link>
+          ) : null}
+
           <div className={styles.topicGrid}>
-            {controllingTopics.map((topic, index) => (
-              <article className={styles.topicCard} key={topic}>
-                <div><span>{String(index + 1).padStart(2, "0")}</span><b>W przygotowaniu</b></div>
-                <h3>{topic}</h3>
-              </article>
+            {controllingSeries.map((article) => (
+              <Link
+                href={`/wiedza/${article.slug}`}
+                className={styles.topicCard}
+                key={article.slug}
+              >
+                <div>
+                  <span>{String(article.number).padStart(2, "0")}</span>
+                  <b>{article.readTime}</b>
+                </div>
+                <h3>{article.title}</h3>
+                <p>{article.excerpt}</p>
+                <span className={styles.topicReadMore}>Czytaj →</span>
+              </Link>
             ))}
           </div>
 

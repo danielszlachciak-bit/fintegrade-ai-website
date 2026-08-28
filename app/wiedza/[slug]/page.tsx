@@ -40,13 +40,17 @@ export default async function KnowledgeArticlePage({ params }: ArticlePageProps)
     notFound();
   }
 
-  const articleIndex = knowledgeArticles.findIndex(
+  const articleTrack = article.track ?? "entrepreneur";
+  const seriesArticles = knowledgeArticles.filter(
+    (item) => (item.track ?? "entrepreneur") === articleTrack
+  );
+  const articleIndex = seriesArticles.findIndex(
     (item) => item.slug === article.slug
   );
-  const previous = articleIndex > 0 ? knowledgeArticles[articleIndex - 1] : null;
+  const previous = articleIndex > 0 ? seriesArticles[articleIndex - 1] : null;
   const next =
-    articleIndex < knowledgeArticles.length - 1
-      ? knowledgeArticles[articleIndex + 1]
+    articleIndex < seriesArticles.length - 1
+      ? seriesArticles[articleIndex + 1]
       : null;
 
   return (
@@ -82,9 +86,9 @@ export default async function KnowledgeArticlePage({ params }: ArticlePageProps)
           <div className={styles.articleDisclaimer}>
             <strong>Warto pamiętać</strong>
             <p>
-              Materiał ma charakter edukacyjny i zarządczy. Nie zastępuje
-              indywidualnej porady księgowej, podatkowej ani prawnej — szczegóły
-              rozliczeń mogą zależeć od formy działalności i konkretnej sytuacji.
+              {articleTrack === "controlling-ai"
+                ? "Materiał ma charakter praktyczno-edukacyjny. Opisuje podejście do controllingu, automatyzacji i AI; konkretne rozwiązanie zawsze powinno uwzględniać dane, procesy, architekturę oraz poziom ryzyka danej organizacji."
+                : "Materiał ma charakter edukacyjny i zarządczy. Nie zastępuje indywidualnej porady księgowej, podatkowej ani prawnej — szczegóły rozliczeń mogą zależeć od formy działalności i konkretnej sytuacji."}
             </p>
           </div>
         </article>
@@ -125,14 +129,14 @@ export default async function KnowledgeArticlePage({ params }: ArticlePageProps)
 function ArticleBlockRenderer({ block }: { block: KnowledgeBlock }) {
   switch (block.type) {
     case "lead":
-      return <p className={styles.bodyLead}>{block.text}</p>;
+      return <p className={styles.bodyLead}>{renderInline(block.text)}</p>;
     case "heading":
-      return <h2 className={styles.bodyHeading}>{block.text}</h2>;
+      return <h2 className={styles.bodyHeading}>{renderInline(block.text)}</h2>;
     case "callout":
       return (
         <aside className={styles.callout}>
           {block.label ? <span>{block.label}</span> : null}
-          <p>{block.text}</p>
+          <p>{renderInline(block.text)}</p>
         </aside>
       );
     case "formula":
@@ -147,11 +151,24 @@ function ArticleBlockRenderer({ block }: { block: KnowledgeBlock }) {
       return (
         <ul className={styles.articleListBullets}>
           {block.items.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item}>{renderInline(item)}</li>
           ))}
         </ul>
       );
     case "paragraph":
-      return <p className={styles.bodyParagraph}>{block.text}</p>;
+      return <p className={styles.bodyParagraph}>{renderInline(block.text)}</p>;
   }
+}
+
+
+function renderInline(text: string) {
+  const parts = text.split(/(\*\*.*?\*\*)/g).filter(Boolean);
+
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={`${part}-${index}`}>{part.slice(2, -2)}</strong>;
+    }
+
+    return <span key={`${part}-${index}`}>{part}</span>;
+  });
 }
