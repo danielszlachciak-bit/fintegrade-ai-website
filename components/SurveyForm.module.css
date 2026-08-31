@@ -1,0 +1,44 @@
+.textarea {
+  width: 100%;
+  margin-top: 8px;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: #173b35;
+  font: inherit;
+  font-weight: 500;
+  line-height: 1.55;
+  resize: vertical;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.textarea:focus {
+  border-color: var(--brand-2);
+  box-shadow: 0 0 0 4px rgba(23, 111, 96, .1);
+}
+
+.textarea::placeholder {
+  color: #8aa09b;
+}
+
+.spacingTop {
+  margin-top: 28px !important;
+}
+
+.selectionCounter {
+  display: inline-flex;
+  margin: 0 0 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--mint-pale);
+  color: var(--brand);
+  font-size: .74rem;
+  font-weight: 800;
+}
+
+.optionalLabel {
+  color: var(--muted);
+  font-weight: 550;
+}

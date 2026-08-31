@@ -7,33 +7,51 @@ import { verifyTurnstile } from "@/lib/turnstile";
 export const runtime = "nodejs";
 
 const PRIVACY_POLICY_VERSION = "2026-08-21";
+const SURVEY_VERSION = "v2.0";
+
+const optionalText = (max: number) => z.string().trim().max(max).optional().default("");
 
 const surveySchema = z
   .object({
     companySize: z.string().trim().min(1).max(80),
     monthlyRevenue: z.string().trim().min(1).max(80),
+    industry: z.string().trim().min(1).max(120),
+    customerModel: z.string().trim().min(1).max(80),
+    bookkeeping: z.string().trim().min(1).max(120),
 
-    financePain: z
-      .array(z.string().trim().min(1).max(160))
+    currentFinanceMethod: z
+      .array(z.string().trim().min(1).max(180))
       .min(1)
       .max(10),
+    financeTime: z.string().trim().min(1).max(80),
 
-    dataAccess: z.string().trim().min(1).max(160),
+    financePain: z
+      .array(z.string().trim().min(1).max(180))
+      .min(1)
+      .max(4),
+    primaryPain: z.string().trim().min(1).max(180),
+    painFrequency: z.string().trim().min(1).max(80),
+    currentWorkaround: optionalText(600),
 
     mustHave: z
-      .array(z.string().trim().min(1).max(160))
+      .array(z.string().trim().min(1).max(180))
       .min(1)
-      .max(12),
+      .max(3),
+    decisionChallenge: optionalText(700),
+    missingFeature: optionalText(500),
+
+    bankAccess: z.string().trim().min(1).max(180),
+    ksefAccess: z.string().trim().min(1).max(180),
+    dataConcerns: z
+      .array(z.string().trim().min(1).max(180))
+      .min(1)
+      .max(3),
 
     willingnessToPay: z.string().trim().min(1).max(80),
+    valueTrigger: optionalText(700),
+    pilotIntent: z.string().trim().min(1).max(140),
 
-    email: z
-      .string()
-      .trim()
-      .email()
-      .max(160)
-      .or(z.literal("")),
-
+    email: z.string().trim().email().max(160).or(z.literal("")),
     privacyAcknowledged: z.literal(true),
     mvpConsent: z.boolean(),
 
@@ -41,12 +59,19 @@ const surveySchema = z
     turnstileToken: z.string().min(1).max(5000),
   })
   .superRefine((data, ctx) => {
+    if (!data.financePain.includes(data.primaryPain)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["primaryPain"],
+        message: "Najważniejszy problem musi być jednym z wcześniej wybranych.",
+      });
+    }
+
     if (data.mvpConsent && !data.email) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["email"],
-        message:
-          "Adres e-mail jest wymagany przy zgodzie na kontakt dotyczący MVP.",
+        message: "Adres e-mail jest wymagany przy zgodzie na kontakt dotyczący MVP.",
       });
     }
   });
@@ -64,25 +89,15 @@ function formatUnknownError(error: unknown) {
     return error;
   }
 
-  return {
-    message: String(error),
-  };
+  return { message: String(error) };
 }
 
 export async function POST(request: Request) {
   try {
-    const contentLength = Number(
-      request.headers.get("content-length") ?? "0"
-    );
+    const contentLength = Number(request.headers.get("content-length") ?? "0");
 
-    if (
-      Number.isFinite(contentLength) &&
-      contentLength > 20_000
-    ) {
-      return NextResponse.json(
-        { error: "payload_too_large" },
-        { status: 413 }
-      );
+    if (Number.isFinite(contentLength) && contentLength > 40_000) {
+      return NextResponse.json({ error: "payload_too_large" }, { status: 413 });
     }
 
     let requestBody: unknown;
@@ -90,10 +105,7 @@ export async function POST(request: Request) {
     try {
       requestBody = await request.json();
     } catch {
-      return NextResponse.json(
-        { error: "invalid_json" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "invalid_json" }, { status: 400 });
     }
 
     const parsed = surveySchema.safeParse(requestBody);
@@ -113,17 +125,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const turnstileValid = await verifyTurnstile(
-      parsed.data.turnstileToken
-    );
+    const turnstileValid = await verifyTurnstile(parsed.data.turnstileToken);
 
     if (!turnstileValid) {
       console.warn("survey_turnstile_failed");
-
-      return NextResponse.json(
-        { error: "bot_check_failed" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "bot_check_failed" }, { status: 403 });
     }
 
     const {
@@ -134,37 +140,52 @@ export async function POST(request: Request) {
 
     const supabase = getSupabaseAdmin();
 
-    const { data: insertedRows, error: insertError } =
-      await supabase
-        .from("survey_submissions")
-        .insert({
-          company_size: surveyData.companySize,
-          monthly_revenue: surveyData.monthlyRevenue,
-          finance_pain: surveyData.financePain,
-          data_access: surveyData.dataAccess,
-          must_have: surveyData.mustHave,
-          willingness_to_pay: surveyData.willingnessToPay,
+    const legacyDataAccess = `Bank: ${surveyData.bankAccess} | KSeF: ${surveyData.ksefAccess}`;
 
-          email: surveyData.email || null,
+    const { data: insertedRows, error: insertError } = await supabase
+      .from("survey_submissions")
+      .insert({
+        survey_version: SURVEY_VERSION,
 
-          privacy_acknowledged:
-            surveyData.privacyAcknowledged,
+        company_size: surveyData.companySize,
+        monthly_revenue: surveyData.monthlyRevenue,
+        industry: surveyData.industry,
+        customer_model: surveyData.customerModel,
+        bookkeeping: surveyData.bookkeeping,
 
-          privacy_policy_version:
-            PRIVACY_POLICY_VERSION,
+        current_finance_method: surveyData.currentFinanceMethod,
+        finance_time: surveyData.financeTime,
 
-          mvp_consent:
-            surveyData.mvpConsent,
+        finance_pain: surveyData.financePain,
+        primary_pain: surveyData.primaryPain,
+        pain_frequency: surveyData.painFrequency,
+        current_workaround: surveyData.currentWorkaround || null,
 
-          mvp_consent_at:
-            surveyData.mvpConsent
-              ? new Date().toISOString()
-              : null,
+        must_have: surveyData.mustHave,
+        decision_challenge: surveyData.decisionChallenge || null,
+        missing_feature: surveyData.missingFeature || null,
 
-          source: "fintegrade.ai",
-        })
-        .select("id")
-        .limit(1);
+        bank_access: surveyData.bankAccess,
+        ksef_access: surveyData.ksefAccess,
+        data_concerns: surveyData.dataConcerns,
+
+        // Zachowujemy również stare pole dla kompatybilności z dotychczasową tabelą.
+        data_access: legacyDataAccess,
+
+        willingness_to_pay: surveyData.willingnessToPay,
+        value_trigger: surveyData.valueTrigger || null,
+        pilot_intent: surveyData.pilotIntent,
+
+        email: surveyData.email || null,
+        privacy_acknowledged: surveyData.privacyAcknowledged,
+        privacy_policy_version: PRIVACY_POLICY_VERSION,
+        mvp_consent: surveyData.mvpConsent,
+        mvp_consent_at: surveyData.mvpConsent ? new Date().toISOString() : null,
+
+        source: "fintegrade.ai",
+      })
+      .select("id")
+      .limit(1);
 
     if (insertError) {
       console.error(
@@ -177,10 +198,7 @@ export async function POST(request: Request) {
         })
       );
 
-      return NextResponse.json(
-        { error: "database_error" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "database_error" }, { status: 500 });
     }
 
     const insertedId = insertedRows?.[0]?.id;
@@ -190,15 +208,12 @@ export async function POST(request: Request) {
         "survey_supabase_error",
         "Insert completed, but Supabase did not return the record ID."
       );
-
-      return NextResponse.json(
-        { error: "database_error" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "database_error" }, { status: 500 });
     }
 
     console.info("survey_submission_saved", {
       id: insertedId,
+      surveyVersion: SURVEY_VERSION,
       mvpConsent: surveyData.mvpConsent,
     });
 
@@ -210,14 +225,7 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error: unknown) {
-    console.error(
-      "survey_submit_failed",
-      formatUnknownError(error)
-    );
-
-    return NextResponse.json(
-      { error: "server_error" },
-      { status: 500 }
-    );
+    console.error("survey_submit_failed", formatUnknownError(error));
+    return NextResponse.json({ error: "server_error" }, { status: 500 });
   }
 }
