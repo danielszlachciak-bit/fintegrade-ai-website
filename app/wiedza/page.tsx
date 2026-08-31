@@ -1,18 +1,240 @@
-import { SectionHeading } from "@/components/SectionHeading";
+import Link from "next/link";
+import { knowledgeArticles } from "@/lib/knowledge";
+import styles from "./knowledge.module.css";
 
-export const metadata = { title: "Wiedza: AI i finanse firmy" };
-
-const articles=[
-  ["Płynność","Jak zbudować prostą prognozę cash flow z danych bankowych i faktur","7 min","Praktyczny model 13-tygodniowy dla mikrofirmy — bez rozbudowanego systemu ERP."],
-  ["AI w firmie","Pięć zadań finansowych, które warto automatyzować jako pierwsze","6 min","Low hanging fruit: mniej ręcznego przepisywania i szybsze wychwytywanie odchyleń."],
-  ["KSeF","Co Digital Twin może zobaczyć w danych z KSeF","8 min","Struktura sprzedaży, dynamika kosztów i sygnały ryzyka ukryte w fakturach."],
-  ["Bezpieczeństwo","Dostęp do rachunku tylko do odczytu — co to naprawdę oznacza","9 min","Zakres uprawnień, ryzyka, zgody i sposoby ograniczania ekspozycji danych."],
-  ["Rentowność","Dlaczego dodatnie saldo na koncie nie oznacza zysku","5 min","Najczęstsze pomyłki właścicieli małych firm i prosty sposób ich uniknięcia."],
-  ["Decyzje","Kiedy nie należy ufać rekomendacji AI","7 min","Sygnały ostrzegawcze, brakujące dane i obowiązek ludzkiej weryfikacji."]
+const categoryOrder = [
+  "Fundamenty finansów",
+  "Płynność i gotówka",
+  "Rentowność i sprzedaż",
+  "Ludzie i koszty pracy",
+  "Cena i podatki"
 ];
 
-export default function KnowledgePage(){return <>
-  <section className="pageHero"><div className="container narrow"><span className="eyebrow">Baza wiedzy</span><h1>Praktycznie o AI, finansach i decyzjach w małej firmie</h1><p>Bez obietnic „rewolucji”. Z przykładami, ograniczeniami i rachunkiem ekonomicznym wdrożenia.</p></div></section>
-  <section className="section"><div className="container"><SectionHeading title="Najnowsze tematy" lead="W tej wersji to katalog startowy. Kolejny krok to podłączenie prostego CMS lub publikowanie treści jako pliki MDX." />
-  <div className="knowledgeGrid">{articles.map(([cat,t,time,d])=><article key={t}><div><span>{cat}</span><small>{time}</small></div><h2>{t}</h2><p>{d}</p><button disabled aria-label="Artykuł w przygotowaniu">Wkrótce</button></article>)}</div></div></section>
-</>}
+
+export const metadata = {
+  title: "Wiedza | fintegrade.ai",
+  description:
+    "Praktyczna wiedza o finansach przedsiębiorcy, controllingu i AI: płynność, rentowność, marża, koszty, forecasting i wsparcie decyzji prostym językiem."
+};
+
+export default function KnowledgePage() {
+  const entrepreneurArticles = knowledgeArticles.filter(
+    (article) => article.track !== "controlling-ai"
+  );
+  const controllingArticles = knowledgeArticles.filter(
+    (article) => article.track === "controlling-ai"
+  );
+  const featured = entrepreneurArticles.slice(0, 3);
+  const controllingFoundation = controllingArticles.find(
+    (article) => article.number === 0
+  );
+  const controllingSeries = controllingArticles.filter(
+    (article) => article.number !== 0
+  );
+
+  return (
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <div className={styles.shell}>
+          <p className={styles.eyebrow}>WIEDZA FINTEGRADE.AI</p>
+          <h1 className={styles.heroTitle}>
+            Finanse, controlling i AI bez niepotrzebnego żargonu.
+          </h1>
+          <p className={styles.heroLead}>
+            Praktyczna biblioteka dla dwóch światów: przedsiębiorcy, który chce lepiej rozumieć finanse własnej firmy, oraz osób odpowiedzialnych za controlling, które chcą mądrze wykorzystać automatyzację i AI.
+          </p>
+          <div className={styles.heroPrinciples} aria-label="Jak piszemy">
+            <span>prosty język</span>
+            <span>konkretne przykłady</span>
+            <span>od problemu do decyzji</span>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.tracksSection}>
+        <div className={styles.shell}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>DWIE ŚCIEŻKI WIEDZY</p>
+              <h2>Wybierz perspektywę, która jest bliższa Twojej pracy.</h2>
+            </div>
+            <p>
+              Oba obszary łączy ten sam cel: zamienić dane finansowe w lepiej uzasadnione decyzje. Różna jest skala, narzędzia i poziom złożoności.
+            </p>
+          </div>
+
+          <div className={styles.tracksGrid}>
+            <a href="#finanse-przedsiebiorcy" className={styles.trackCard}>
+              <div className={styles.trackTopline}><span>01</span><b>20 opublikowanych artykułów</b></div>
+              <h3>Finanse przedsiębiorcy</h3>
+              <p>Płynność, zysk, gotówka, rentowność, marża, koszty, zatrudnienie i podatki — wyjaśnione na przykładach z życia małej firmy.</p>
+              <span className={styles.trackLink}>Przejdź do biblioteki ↓</span>
+            </a>
+
+            <a href="#controlling-ai" className={`${styles.trackCard} ${styles.trackCardDark}`}>
+              <div className={styles.trackTopline}><span>02</span><b>11 opublikowanych artykułów</b></div>
+              <h3>Controlling × AI</h3>
+              <p>Automatyzacja analiz, forecasting, scenariusze, AI jako copilot controllera i projektowanie controllingu, który wspiera decyzje zamiast tylko produkować raporty.</p>
+              <span className={styles.trackLink}>Przejdź do serii ↓</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.featuredSection} id="finanse-przedsiebiorcy">
+        <div className={styles.shell}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>FINANSE PRZEDSIĘBIORCY</p>
+              <h2>Trzy rzeczy, które warto zrozumieć najpierw</h2>
+            </div>
+            <p>
+              To fundamenty. Bez nich łatwo pomylić dobrą sprzedaż z dobrym biznesem albo wysokie saldo z bezpieczeństwem finansowym.
+            </p>
+          </div>
+
+          <div className={styles.featuredGrid}>
+            {featured.map((article) => (
+              <Link href={`/wiedza/${article.slug}`} className={styles.featuredCard} key={article.slug}>
+                <div className={styles.cardTopline}>
+                  <span className={styles.articleNumber}>{String(article.number).padStart(2, "0")}</span>
+                  <span>{article.readTime}</span>
+                </div>
+                <h3>{article.title}</h3>
+                <p>{article.excerpt}</p>
+                <span className={styles.readMore}>Czytaj artykuł →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.librarySection}>
+        <div className={styles.shell}>
+          <div className={styles.sectionHeadingCompact}>
+            <p className={styles.eyebrow}>PRAKTYCZNA BIBLIOTEKA</p>
+            <h2>20 tematów, które pomagają czytać własną firmę</h2>
+          </div>
+
+          <nav className={styles.jumpNav} aria-label="Kategorie wiedzy">
+            {categoryOrder.map((category) => (
+              <a key={category} href={`#${slugifyCategory(category)}`}>{category}</a>
+            ))}
+          </nav>
+
+          <div className={styles.categoryStack}>
+            {categoryOrder.map((category) => {
+              const items = entrepreneurArticles.filter((article) => article.category === category);
+
+              return (
+                <section className={styles.categorySection} id={slugifyCategory(category)} key={category}>
+                  <div className={styles.categoryHeader}>
+                    <h3>{category}</h3>
+                    <span>{items.length} artykułów</span>
+                  </div>
+
+                  <div className={styles.articleList}>
+                    {items.map((article) => (
+                      <Link href={`/wiedza/${article.slug}`} className={styles.articleRow} key={article.slug}>
+                        <span className={styles.rowNumber}>{String(article.number).padStart(2, "0")}</span>
+                        <div className={styles.rowContent}>
+                          <h4>{article.title}</h4>
+                          <p>{article.excerpt}</p>
+                        </div>
+                        <span className={styles.rowMeta}>{article.readTime}</span>
+                        <span className={styles.rowArrow} aria-hidden="true">→</span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.controllingSection} id="controlling-ai">
+        <div className={styles.shell}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>CONTROLLING × AI</p>
+              <h2>Najpierw rama controllingu. Dopiero potem technologia.</h2>
+            </div>
+            <p>
+              Seria prowadzi od pytania, czym powinien być współczesny controlling,
+              przez wybór zastosowań AI i rolę controllera, aż po konkretne use case&apos;y,
+              architekturę informacji oraz pomiar ROI.
+            </p>
+          </div>
+
+          {controllingFoundation ? (
+            <Link
+              href={`/wiedza/${controllingFoundation.slug}`}
+              className={styles.controllingFoundation}
+            >
+              <div className={styles.foundationTopline}>
+                <span>00 · ZACZNIJ TUTAJ</span>
+                <span>{controllingFoundation.readTime}</span>
+              </div>
+              <h3>{controllingFoundation.title}</h3>
+              <p>{controllingFoundation.excerpt}</p>
+              <span className={styles.readMore}>Czytaj artykuł →</span>
+            </Link>
+          ) : null}
+
+          <div className={styles.topicGrid}>
+            {controllingSeries.map((article) => (
+              <Link
+                href={`/wiedza/${article.slug}`}
+                className={styles.topicCard}
+                key={article.slug}
+              >
+                <div>
+                  <span>{String(article.number).padStart(2, "0")}</span>
+                  <b>{article.readTime}</b>
+                </div>
+                <h3>{article.title}</h3>
+                <p>{article.excerpt}</p>
+                <span className={styles.topicReadMore}>Czytaj →</span>
+              </Link>
+            ))}
+          </div>
+
+          <div className={styles.controllingCta}>
+            <div>
+              <strong>Chcesz zobaczyć, jak podchodzę do wdrożeń?</strong>
+              <p>Na stronie Controlling × AI opisuję obszary, od których warto zaczynać, oraz sposób pracy od diagnozy do prototypu.</p>
+            </div>
+            <Link href="/controlling-ai" className={styles.primaryLink}>Controlling × AI</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.bottomCta}>
+        <div className={`${styles.shell} ${styles.bottomCtaInner}`}>
+          <div>
+            <p className={styles.eyebrow}>FINTEGRADE.AI</p>
+            <h2>Wiedza jest ważna. Jeszcze lepiej, gdy pracuje na rzeczywistym problemie.</h2>
+            <p>
+              Dla mikrofirm rozwijamy finansowego Digital Twin. Dla większych organizacji — rozwiązania controllingowe wspierane przez AI. W obu przypadkach technologia ma prowadzić do lepszej decyzji, nie do kolejnego raportu.
+            </p>
+          </div>
+          <div className={styles.ctaLinks}>
+            <Link href="/digital-twin" className={styles.primaryLink}>Digital Twin</Link>
+            <Link href="/controlling-ai" className={styles.secondaryLink}>Controlling × AI</Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function slugifyCategory(category: string) {
+  return category
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ł/g, "l")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}

@@ -237,10 +237,10 @@ fieldset { padding: 0; border: 0; }
 legend { margin-bottom: 10px; font-size: clamp(1.55rem, 3vw, 2.2rem); font-weight: 850; letter-spacing: -.035em; }
 .formLead { margin-bottom: 26px; }
 .surveyForm label, .contactForm label { display: block; margin-bottom: 22px; color: #314844; font-size: .84rem; font-weight: 760; }
-.surveyForm input[type="text"], .surveyForm input[type="email"], .surveyForm select, .contactForm input, .contactForm textarea {
+.surveyForm input[type="text"], .surveyForm input[type="email"], .surveyForm select, .contactForm input, .contactForm select, .contactForm textarea {
   width: 100%; margin-top: 8px; padding: 14px 15px; border: 1px solid #cdd9d6; border-radius: 12px; background: #fbfcfc; color: var(--ink); outline: none;
 }
-.surveyForm input:focus, .surveyForm select:focus, .contactForm input:focus, .contactForm textarea:focus { border-color: var(--brand-2); box-shadow: 0 0 0 4px rgba(23,111,96,.1); }
+.surveyForm input:focus, .surveyForm select:focus, .contactForm input:focus, .contactForm select:focus, .contactForm textarea:focus { border-color: var(--brand-2); box-shadow: 0 0 0 4px rgba(23,111,96,.1); }
 .checkGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .checkCard { min-height: 78px; margin: 0 !important; padding: 14px; display: flex !important; align-items: center; gap: 11px; border: 1px solid var(--line); border-radius: 13px; cursor: pointer; transition: .2s ease; }
 .checkCard:has(input:checked) { border-color: var(--brand-2); background: var(--mint-pale); }
@@ -376,4 +376,143 @@ legend { margin-bottom: 10px; font-size: clamp(1.55rem, 3vw, 2.2rem); font-weigh
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
+/* ABOUT PAGE - PORTRAIT */
+
+.portraitPhoto {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  align-self: start;
+}
+
+.portraitPhoto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+  object-fit: cover;
+}
+
+
+/* ABOUT PAGE - KEY STATEMENT */
+
+.aboutStatement {
+  margin: 32px 0;
+  font-size: 1.15rem;
+}
+
+
+/* ABOUT PAGE - THREE KEY QUESTIONS */
+
+.aboutQuestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin: 28px 0 32px;
+  padding: 24px 28px;
+
+  border-radius: 20px;
+
+  font-size: 1.2rem;
+  line-height: 1.45;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .portraitPhoto {
+    max-width: 320px;
+    margin-bottom: 32px;
+  }
+
+  .aboutQuestions {
+    padding: 20px;
+    font-size: 1.1rem;
+  }
+}
+/* Two business paths */
+.audienceSection { background: white; }
+.audienceGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.audienceCard { min-height: 465px; display: flex; flex-direction: column; padding: 36px; border: 1px solid var(--line); border-radius: var(--radius-xl); background: #f8faf9; box-shadow: 0 12px 42px rgba(14,54,48,.05); }
+.audienceCardConsulting { background: var(--brand); color: white; border-color: var(--brand); }
+.audienceTopline { display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--brand-2); font-size: .73rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.audienceTopline b { color: #647773; font-weight: 750; letter-spacing: 0; text-transform: none; }
+.audienceCardConsulting .audienceTopline { color: var(--mint); }
+.audienceCardConsulting .audienceTopline b { color: #b6d0ca; }
+.audienceCard h3 { max-width: 540px; margin: 48px 0 16px; font-size: clamp(1.75rem, 3vw, 2.5rem); }
+.audienceCard p { max-width: 570px; }
+.audienceCardConsulting p { color: #c4d9d4; }
+.audienceCard ul { margin: 8px 0 30px; padding: 0; list-style: none; }
+.audienceCard li { position: relative; padding: 7px 0 7px 26px; color: #405954; }
+.audienceCard li::before { content: "✓"; position: absolute; left: 0; color: var(--brand-2); font-weight: 900; }
+.audienceCardConsulting li { color: #d7e6e2; }
+.audienceCardConsulting li::before { color: var(--mint); }
+.audienceActions { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+.audienceCardConsulting .button.primary { background: var(--mint); color: var(--brand); box-shadow: none; }
+.audienceCardConsulting .textLink { color: var(--mint); }
+
+/* Consulting teaser on home */
+.consultingTeaser { background: #f8faf9; }
+.consultingSplit { align-items: start; }
+.consultingMiniGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.consultingMiniGrid article { min-height: 205px; padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: white; }
+.consultingMiniGrid article > span { color: var(--brand-2); font-size: .72rem; font-weight: 900; letter-spacing: .08em; }
+.consultingMiniGrid h3 { margin: 30px 0 10px; font-size: 1.12rem; }
+.consultingMiniGrid p { margin: 0; font-size: .9rem; line-height: 1.55; }
+
+/* Controlling x AI page */
+.consultingHero { background: radial-gradient(circle at 50% -10%, rgba(145,230,199,.38), transparent 52%), linear-gradient(180deg, #f7f9f8 0%, #f0f5f3 100%); }
+.consultingHero h1 { font-size: clamp(2.8rem, 5.5vw, 4.9rem); }
+.consultingHeroActions { justify-content: center; }
+.consultingAreaGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.consultingAreaCard { min-height: 420px; padding: 32px; border-radius: var(--radius-lg); background: white; border: 1px solid var(--line); }
+.consultingAreaHeader { display: flex; align-items: center; gap: 18px; }
+.consultingAreaHeader > span { width: 46px; height: 46px; flex: 0 0 auto; display: grid; place-content: center; border-radius: 14px; background: var(--mint-pale); color: var(--brand-2); font-size: .76rem; font-weight: 900; }
+.consultingAreaHeader h3 { margin: 0; font-size: 1.55rem; }
+.consultingAreaCard > p { margin: 25px 0 18px; }
+.consultingAreaCard ul { margin: 0; padding: 0; list-style: none; }
+.consultingAreaCard li { position: relative; padding: 9px 0 9px 27px; border-bottom: 1px solid var(--line); color: #405954; }
+.consultingAreaCard li::before { content: "→"; position: absolute; left: 0; color: var(--brand-2); font-weight: 900; }
+.noAiGrid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 78px; align-items: start; }
+.noAiCopy { padding: 34px; border-radius: var(--radius-lg); background: white; border: 1px solid var(--line); }
+.noAiCopy p:last-child { margin-bottom: 0; color: var(--ink); }
+.lowFruitGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.lowFruitGrid article { min-height: 245px; padding: 28px; border-radius: var(--radius-lg); background: white; border: 1px solid var(--line); }
+.lowFruitGrid article > span { color: var(--brand-2); font-size: .75rem; font-weight: 900; letter-spacing: .08em; }
+.lowFruitGrid h3 { margin: 36px 0 12px; font-size: 1.32rem; }
+.consultingProcess article { min-height: 285px; }
+.experiencePanel { min-height: 320px; padding: 52px; display: flex; align-items: center; justify-content: space-between; gap: 50px; border-radius: var(--radius-xl); background: linear-gradient(130deg, #0b3b35, #154f47); color: white; box-shadow: var(--shadow); }
+.experiencePanel h2 { max-width: 760px; margin-bottom: 14px; font-size: clamp(2rem, 4vw, 3.4rem); }
+.experiencePanel p { max-width: 760px; margin-bottom: 0; color: #c4ddd7; }
+.experienceActions { display: flex; flex-direction: column; gap: 10px; flex: 0 0 auto; }
+.experienceGhost { border: 1px solid rgba(255,255,255,.35); color: white; background: transparent; }
+.consultingFinalCta { padding-top: 20px; }
+
+@media (max-width: 1050px) {
+  .audienceCard { min-height: 490px; }
+  .noAiGrid { gap: 45px; }
+}
+
+@media (max-width: 820px) {
+  .audienceGrid, .consultingAreaGrid, .noAiGrid { grid-template-columns: 1fr; }
+  .audienceCard { min-height: 0; }
+  .consultingMiniGrid { grid-template-columns: 1fr 1fr; }
+  .experiencePanel { align-items: flex-start; flex-direction: column; }
+  .experienceActions { flex-direction: row; flex-wrap: wrap; }
+}
+
+@media (max-width: 620px) {
+  .audienceCard { padding: 26px; border-radius: 22px; }
+  .audienceCard h3 { margin-top: 38px; }
+  .audienceTopline { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .audienceActions { align-items: flex-start; flex-direction: column; }
+  .consultingMiniGrid, .lowFruitGrid { grid-template-columns: 1fr; }
+  .consultingAreaCard { min-height: 0; padding: 25px; }
+  .noAiCopy { padding: 25px; }
+  .experiencePanel { padding: 34px 25px; border-radius: 24px; }
+  .experienceActions { width: 100%; flex-direction: column; }
+  .experienceActions .button { width: 100%; }
 }

@@ -2,11 +2,10 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 
 const nav = [
-  ["Wiedza", "/wiedza"],
   ["Digital Twin", "/digital-twin"],
-  ["Demo", "/mvp"],
+  ["Controlling × AI", "/controlling-ai"],
+  ["Wiedza", "/wiedza"],
   ["Ankieta", "/ankieta"],
-  ["Bezpieczeństwo", "/bezpieczenstwo"],
   ["O mnie", "/o-mnie"],
 ] as const;
 
