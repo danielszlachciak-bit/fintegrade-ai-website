@@ -62,7 +62,7 @@ export default function PrivacyPolicyPage() {
           </p>
 
           <p>
-            <strong>Ostatnia aktualizacja: 21 sierpnia 2026 r.</strong>
+            <strong>Ostatnia aktualizacja: 31 sierpnia 2026 r.</strong>
           </p>
         </div>
       </section>
@@ -76,6 +76,8 @@ export default function PrivacyPolicyPage() {
               <h3>Administrator</h3>
               <p>
                 Daniel Szlachciak
+                <br />
+                Głogowa 11, 62-006 Dębogóra
                 <br />
                 <a href="mailto:kontakt@fintegrade.ai">
                   kontakt@fintegrade.ai
@@ -113,11 +115,13 @@ export default function PrivacyPolicyPage() {
 
           <p>
             Administratorem danych osobowych przetwarzanych za pośrednictwem
-            fintegrade.ai jest obecnie:
+            fintegrade.ai jest:
           </p>
 
           <p className="largeText">
             <strong>Daniel Szlachciak</strong>
+            <br />
+            Głogowa 11, 62-006 Dębogóra
             <br />
             e-mail:{" "}
             <a href="mailto:kontakt@fintegrade.ai">
@@ -125,11 +129,6 @@ export default function PrivacyPolicyPage() {
             </a>
           </p>
 
-          <p>
-            Po rozpoczęciu prowadzenia działalności gospodarczej oznaczenie
-            administratora zostanie zaktualizowane o firmę, NIP, REGON i adres
-            działalności.
-          </p>
 
           <p>
             W każdej sprawie dotyczącej prywatności lub przetwarzania danych

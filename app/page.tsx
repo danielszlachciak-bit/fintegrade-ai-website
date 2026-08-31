@@ -63,7 +63,7 @@ export default function Home() {
               <li>alerty i prognozy</li>
               <li>scenariusze i lista decyzji</li>
             </ul>
-            <div className="audienceActions"><Link className="button primary" href="/digital-twin">Poznaj fintegrade.ai</Link><Link className="textLink" href="/mvp">Zobacz demo →</Link></div>
+            <div className="audienceActions"><Link className="button primary" href="/digital-twin">Poznaj fintegrade.ai</Link><Link className="textLink" href="/ankieta">Wypełnij ankietę →</Link></div>
           </article>
 
           <article className="audienceCard audienceCardConsulting">

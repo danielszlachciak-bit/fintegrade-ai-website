@@ -34,9 +34,10 @@ export default function SurveyPage() {
               <li>wybrać osoby zainteresowane testem na realnych danych.</li>
             </ul>
             <p>
-              Odpowiedzi będą analizowane zbiorczo. E-mail jest opcjonalny i
-              potrzebny wyłącznie wtedy, gdy chcesz otrzymać zaproszenie do
-              testów MVP.
+              Odpowiedzi będą analizowane zbiorczo. E-mail jest opcjonalny.
+              Jeśli wypełnisz ankietę, zostawisz adres e-mail i zaznaczysz chęć
+              udziału w testach, będziemy mogli zaprosić Cię do bezpłatnego
+              testowania wersji MVP.
             </p>
           </aside>
 

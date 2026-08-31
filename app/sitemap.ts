@@ -8,7 +8,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/wiedza",
     "/digital-twin",
     "/controlling-ai",
-    "/mvp",
     "/ankieta",
     "/bezpieczenstwo",
     "/o-mnie",

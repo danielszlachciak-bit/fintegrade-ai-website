@@ -5,7 +5,7 @@ const nav = [
   ["Digital Twin", "/digital-twin"],
   ["Controlling × AI", "/controlling-ai"],
   ["Wiedza", "/wiedza"],
-  ["Demo", "/mvp"],
+  ["Ankieta", "/ankieta"],
   ["O mnie", "/o-mnie"],
 ] as const;
 
@@ -22,7 +22,6 @@ export function Header() {
           <summary aria-label="Otwórz menu"><span /><span /><span /></summary>
           <nav aria-label="Menu mobilne">
             {nav.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
-            <Link href="/ankieta">Ankieta przedsiębiorców</Link>
             <Link href="/kontakt">Porozmawiajmy</Link>
           </nav>
         </details>

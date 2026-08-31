@@ -13,7 +13,6 @@ export function Footer() {
         <div>
           <strong>Dwa obszary</strong>
           <Link href="/digital-twin">Digital Twin dla mikrofirm</Link>
-          <Link href="/mvp">Demo aplikacji</Link>
           <Link href="/ankieta">Ankieta przedsiębiorców</Link>
           <Link href="/controlling-ai">Controlling × AI</Link>
         </div>

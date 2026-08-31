@@ -573,15 +573,19 @@ export function SurveyForm() {
 
       {step === 5 && (
         <fieldset>
-          <legend>Dane i zaufanie</legend>
+          <legend>Dane potrzebne do pełnego wykorzystania aplikacji</legend>
           <p className="formLead">
-            Bank i KSeF pytamy osobno — poziom akceptacji może być zupełnie inny.
-            Chodzi wyłącznie o przyszły model dostępu do danych, nie o przekazanie
-            ich w tej ankiecie.
+            W jakim stopniu jesteś gotowy/a udostępnić aplikacji fintegrade.ai
+            poniższe dane, aby mogła w pełni analizować sytuację firmy i
+            przygotowywać trafniejsze alerty, prognozy oraz rekomendacje?
+            Pytamy osobno o rachunek bankowy i KSeF. W przypadku automatycznej
+            integracji zakładamy wyłącznie dostęp do odczytu — bez możliwości
+            wykonywania przelewów, wystawiania faktur ani modyfikowania danych.
+            W tej ankiecie nie przekazujesz żadnych danych finansowych.
           </p>
 
           <label>
-            Rachunek bankowy firmy
+            Rachunek bankowy firmy — jaki sposób dostępu byłby dla Ciebie akceptowalny?
             <select
               required
               value={form.bankAccess}
@@ -597,7 +601,7 @@ export function SurveyForm() {
           </label>
 
           <label>
-            Dane z KSeF / faktury
+            Dane z KSeF / faktury — jaki sposób dostępu byłby dla Ciebie akceptowalny?
             <select
               required
               value={form.ksefAccess}
@@ -692,7 +696,7 @@ export function SurveyForm() {
               <option value="">Wybierz</option>
               <option>Tak — chętnie przetestuję na własnych danych</option>
               <option>Może — zależy od zakresu i bezpieczeństwa</option>
-              <option>Najpierw chcę zobaczyć demo</option>
+              <option>Najpierw chcę zobaczyć gotową wersję MVP / więcej informacji</option>
               <option>Nie na tym etapie</option>
             </select>
           </label>
