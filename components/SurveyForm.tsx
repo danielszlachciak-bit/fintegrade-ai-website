@@ -346,6 +346,9 @@ export function SurveyForm() {
             >
               <option value="">Wybierz</option>
               <option>Usługi profesjonalne / B2B</option>
+              <option>Usługi szkoleniowe / coaching</option>
+              <option>IT / software / AI</option>
+              <option>Marketing</option>
               <option>Handel detaliczny / e-commerce</option>
               <option>Handel hurtowy / dystrybucja</option>
               <option>Produkcja</option>
@@ -353,7 +356,6 @@ export function SurveyForm() {
               <option>Transport / logistyka</option>
               <option>Gastronomia / hotelarstwo</option>
               <option>Zdrowie / uroda / wellbeing</option>
-              <option>IT / software / marketing</option>
               <option>Inna</option>
             </select>
           </label>
@@ -520,8 +522,8 @@ export function SurveyForm() {
         <fieldset>
           <legend>Co pierwsza wersja naprawdę musi umieć?</legend>
           <p className="formLead">
-            Gdyby MVP mogło mieć tylko 3 funkcje, które wybierasz? To pytanie
-            wymusza priorytety — maksymalnie 3 odpowiedzi.
+            Gdyby MVP (czyli wstępna wersja aplikacji) mogło mieć tylko 3 funkcje,
+            które wybierasz? To pytanie wymusza priorytety — maksymalnie 3 odpowiedzi.
           </p>
 
           <div className={styles.selectionCounter}>Wybrano {form.mustHave.length}/3</div>
